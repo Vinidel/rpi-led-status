@@ -21,13 +21,16 @@ function parseResponse(data) {
 
 //update status when it is closed
 function updateLedStatus(status) {
+  const data = {
+    status
+  };
   const options = {
     headers: {
       'Content-Type': 'application/json'
     },
     method: 'POST',
     url: `${URL}`,
-    data: JSON.stringify(status)
+    data: JSON.stringify(data)
   }
 
   return rp(options);

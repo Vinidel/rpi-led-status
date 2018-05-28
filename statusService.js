@@ -29,10 +29,11 @@ function updateLedStatus(status) {
       'Content-Type': 'application/json'
     },
     method: 'POST',
-    url: `${URL}`,
-    data: JSON.stringify(data)
+    uri: URL,
+    body: JSON.stringify(data)
   }
-
+  
+  console.log('Heyyyy', options);
   return rp(options);
 }
 

@@ -12,7 +12,8 @@ const options = {
   },
   json: true // Automatically parses the JSON string in the response
 };
-const FIVE_SECONDS = 50000;
+const TWO_SECONDS = 2000;
+const FIVE_SECONDS = 5000;
 
 //parse API Gateway response
 function parseResponse(data) {

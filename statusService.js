@@ -12,6 +12,7 @@ const options = {
   },
   json: true // Automatically parses the JSON string in the response
 };
+const FIVE_SECONDS = 50000;
 
 //parse API Gateway response
 function parseResponse(data) {
@@ -24,6 +25,7 @@ function updateLedStatus(status) {
   const data = {
     status
   };
+
   const options = {
     headers: {
       'Content-Type': 'application/json'
@@ -33,8 +35,9 @@ function updateLedStatus(status) {
     body: JSON.stringify(data)
   }
   
-  console.log('Heyyyy', options);
-  return rp(options);
+  return rp(options)
+    .then(() => console.log('Success'))
+    .catch((e) => console.log('Error', e));
 }
 
 
@@ -43,25 +46,25 @@ let cachedStatus = 'off';
 function write(status) {
   //Call to aws
   setInterval(function() {
-    console.log('Making the request');
+    console.log('Fetching status');
     rp(options)
       .then(function (data) {
         const status = parseResponse(data).status;
 
         if(status === cachedStatus) {
-          console.log('Status hasn\'t changed');
+          console.log('Status hasn\'t changed, nothing to do');
         } else {
+          console.log('Status has changed, writing to pin');
           const state = status === 'on';
 
           gpio.write(pinNumber, state, function(err) {
             if(err) throw err;
-            console.log('Writen to pin');
           });
 
             if(status === 'on') {
               setTimeout(() => {
                 updateLedStatus('off')
-              }, 1000);
+              }, FIVE_SECONDS);
             }
           cachedStatus = status;
           return;

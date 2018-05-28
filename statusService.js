@@ -19,6 +19,20 @@ function parseResponse(data) {
   return {id: status.id, status: status.status};
 }
 
+//update status when it is closed
+function updateLedStatus(status) {
+  const options = {
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    method: 'POST',
+    url: `${URL}`,
+    data: JSON.stringify(status)
+  }
+
+  return rp(options);
+}
+
 
 let cachedStatus = 'off';
 //read/write to pin
@@ -39,9 +53,15 @@ function write(status) {
             if(err) throw err;
             console.log('Writen to pin');
           });
+
+            if(status === 'on') {
+              setTimeout(() => {
+                updateLedStatus('off')
+              }, 1000);
+            }
           cachedStatus = status;
           return;
-        }
+          }
       })
       .catch(function (err) {
         console.log('Error', err.message);

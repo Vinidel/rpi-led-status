@@ -3,9 +3,9 @@
 const rp = require('request-promise');
 const gpio = require('rpi-gpio');
 const pinNumber = 37;
-
+const URL = 'https://s59jp649x3.execute-api.ap-southeast-2.amazonaws.com/dev/led';
 const options = {
-  uri: 'https://s59jp649x3.execute-api.ap-southeast-2.amazonaws.com/dev/led',
+  uri: URL,
   headers: {
     'x-api-key': 'key',
     'token': 'hello'

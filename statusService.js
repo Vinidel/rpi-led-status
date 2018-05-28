@@ -2,9 +2,10 @@
 
 const rp = require('request-promise');
 const gpio = require('rpi-gpio');
+const pinNumber = 37;
 
 const options = {
-  uri: 'https://dt9emlojka.execute-api.ap-southeast-2.amazonaws.com/prod/led?TableName=led',
+  uri: 'https://s59jp649x3.execute-api.ap-southeast-2.amazonaws.com/dev/led',
   headers: {
     'x-api-key': 'key',
     'token': 'hello'
@@ -14,8 +15,8 @@ const options = {
 
 //parse API Gateway response
 function parseResponse(data) {
-  const Items = data.Items;
-  return {id: Items[0].id, status: Items[0].status};
+  const status  = data;
+  return {id: status.id, status: status.status};
 }
 
 
@@ -34,7 +35,7 @@ function write(status) {
         } else {
           const state = status === 'on';
 
-          gpio.write(11, state, function(err) {
+          gpio.write(pinNumber, state, function(err) {
             if(err) throw err;
             console.log('Writen to pin');
           });
@@ -50,6 +51,6 @@ function write(status) {
 
 
 //Prepare pin to read write
-gpio.setup(11, gpio.DIR_OUT, write);
+gpio.setup(pinNumber, gpio.DIR_OUT, write);
 
 
